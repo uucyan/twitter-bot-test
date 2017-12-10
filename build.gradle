@@ -47,6 +47,7 @@ dependencies {
 	compile("org.jetbrains.kotlin:kotlin-stdlib-jre8:${kotlinVersion}")
 	compile("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
 	compile('mysql:mysql-connector-java')
+	compile('me.mattak:moment:0.0.4')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }
 

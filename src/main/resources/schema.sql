@@ -7,7 +7,7 @@ create table if not exists test (
 
 delete from test;
 insert into test VALUES
-  ( 1 , 'bot1', NOW() , NOW()),
+  ( 1 , 'ボットのテスト', NOW() , NOW()),
   ( 2 , 'bot2', NOW() , NOW()),
   ( 3 , 'bot3', NOW() , NOW())
 ;
