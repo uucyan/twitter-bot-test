@@ -2,6 +2,11 @@ spring:
   profiles:
     active: dev
 
+spring.social:
+  twitter:
+    appId: DRrJp1VWExASN64BVgknupI3T
+    appSecret: NgWxrk0cWk1VJVbYV0SQFmVk8ahdzKSqphxfGsHbIdutEBiMgp
+
 # ローカル環境
 ---
 spring:
