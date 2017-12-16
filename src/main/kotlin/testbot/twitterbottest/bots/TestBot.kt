@@ -14,24 +14,14 @@ class TestBot @Autowired constructor(private val testService: TestService) {
 
   companion object {
     // 重複処理実行の最大回数
-    const val MAX_DUPLICATE_COUNT = 13
+    const val MAX_DUPLICATE_COUNT = 10
   }
 
   // テスト用のツイート内容
   private val tweets = arrayOf(
-    "ツイート1",
-    "ツイート2",
-    "ツイート3",
-    "ツイート4",
-    "ツイート5",
-    "ツイート6",
-    "ツイート7",
-    "ツイート8",
-    "ツイート9",
-    "ツイート10",
-    "ツイート11",
-    "ツイート12",
-    "ツイート13"
+    "つぶやきてすと",
+    "ついーとてすと",
+    "て・す・と♡"
   )
 
   private val rand = Random()
@@ -52,9 +42,9 @@ class TestBot @Autowired constructor(private val testService: TestService) {
     val twitter = TwitterTemplate(consumerKey, consumerSecret, accessToken, accessTokenSecret)
 
     // ツイート処理実行
-    // Twitterの重複エラーが発生した場合、11回まで再帰的に処理を繰り返す。
+    // Twitterの重複エラーが発生した場合、指定回数分再帰的に処理を繰り返す。
     try {
-      twitter.timelineOperations().updateStatus("${tweets[rand.nextInt(tweets.size)]} ${test.name}")
+      twitter.timelineOperations().updateStatus("${tweets[rand.nextInt(tweets.size)]} ${Moment().format("yyyy/MM/dd HH:mm:ss")}")
     } catch (e: DuplicateStatusException) {
       duplicateCount += 1
       if (duplicateCount <= MAX_DUPLICATE_COUNT) {
@@ -66,6 +56,7 @@ class TestBot @Autowired constructor(private val testService: TestService) {
         duplicateCount = 0
       }
     } finally {
+      // 今のところここで処理する内容ないけどfinally定義しておく
     }
   }
 }
