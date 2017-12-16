@@ -4,15 +4,15 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import org.springframework.social.twitter.api.impl.TwitterTemplate
 import org.springframework.social.DuplicateStatusException
-import testbot.twitterbottest.model.Test
-import testbot.twitterbottest.service.TestService
+import testbot.twitterbottest.service.TwitterKeysService
 import me.mattak.moment.Moment
 import java.util.Random
 
 @Component
-class TestBot @Autowired constructor(private val testService: TestService) {
+class TestBot @Autowired constructor(private val twitterKeysService: TwitterKeysService) {
 
   companion object {
+    const val BOT_TYPE = "test"
     // 重複処理実行の最大回数
     const val MAX_DUPLICATE_COUNT = 10
   }
@@ -27,19 +27,13 @@ class TestBot @Autowired constructor(private val testService: TestService) {
   private val rand = Random()
 
   // DBから取得したデータ
-  private val test = testService.findById(1)
-
-  // ツイッターアカウントへのアクセス情報
-  private val consumerKey = "DRrJp1VWExASN64BVgknupI3T"
-  private val consumerSecret = "NgWxrk0cWk1VJVbYV0SQFmVk8ahdzKSqphxfGsHbIdutEBiMgp"
-  private val accessToken = "938316768862527488-KcwZafQ7FD8r1eMACFoNyNcztCN5Xuj"
-  private val accessTokenSecret = "VvHiFm5kcNodCDgR3BGrYDumF3UH7Rvxsd7sSs1mx77ce"
+  private val twitterKeys = twitterKeysService.findByBotType(BOT_TYPE)
 
   // 重複回数
   private var duplicateCount = 0
 
   fun execute() {
-    val twitter = TwitterTemplate(consumerKey, consumerSecret, accessToken, accessTokenSecret)
+    val twitter = TwitterTemplate(twitterKeys.consumer_key, twitterKeys.consumer_secret, twitterKeys.access_token, twitterKeys.access_token_secret)
 
     // ツイート処理実行
     // Twitterの重複エラーが発生した場合、指定回数分再帰的に処理を繰り返す。
