@@ -4,12 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import org.springframework.social.twitter.api.impl.TwitterTemplate
 import org.springframework.social.DuplicateStatusException
+import org.springframework.core.env.Environment
 import testbot.twitterbottest.service.TwitterKeysService
 import me.mattak.moment.Moment
 import java.util.Random
 
 @Component
-class TestBot @Autowired constructor(private val twitterKeysService: TwitterKeysService) {
+class TestBot @Autowired constructor(private val twitterKeysService: TwitterKeysService,
+                                     private val environment: Environment) {
 
   companion object {
     const val BOT_TYPE = "test"
@@ -33,6 +35,7 @@ class TestBot @Autowired constructor(private val twitterKeysService: TwitterKeys
   private var duplicateCount = 0
 
   fun execute() {
+    println(environment.getProperty("spring.config.name"))
     val twitter = TwitterTemplate(twitterKeys.consumer_key, twitterKeys.consumer_secret, twitterKeys.access_token, twitterKeys.access_token_secret)
 
     // ツイート処理実行
