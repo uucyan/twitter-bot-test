@@ -1,50 +1,50 @@
-spring:
-  profiles:
-    active: dev
-
-spring.social:
-  twitter:
-    appId: DRrJp1VWExASN64BVgknupI3T
-    appSecret: NgWxrk0cWk1VJVbYV0SQFmVk8ahdzKSqphxfGsHbIdutEBiMgp
-
-# ローカル環境
----
-spring:
-  profiles: dev
-  data:
-    basePath: /testbot
-  datasource:
-    url: jdbc:mysql://localhost:3306/test_bot?useSSL=false
-    username: root
-    password: catty229
-    driverClassName: com.mysql.jdbc.Driver
-
-# テスト環境
----
-spring:
-  profiles: test
-  data:
-    basePath: /testbot
-  datasource:
-    url: jdbc:mysql://[テスト環境のアクセス情報]
-    username: [ユーザ名]
-    password: [パスワード]
-    initialize: com.mysql.jdbc.Driver
-
-# 本番環境
----
-spring:
-  profiles: production
-  data:
-    basePath: /testbot
-  datasource:
-    url: jdbc:mysql://[本番環境のアクセス情報]
-    username: [ユーザ名]
-    password: [パスワード]
-    initialize: com.mysql.jdbc.Driver
-
-jpa:
-  database: MYSQL
-  hibernate:
-    ddl-auto: update
-    show-sql: true
+# spring:
+#   profiles:
+#     active: dev
+#
+# spring.social:
+#   twitter:
+#     appId: DRrJp1VWExASN64BVgknupI3T
+#     appSecret: NgWxrk0cWk1VJVbYV0SQFmVk8ahdzKSqphxfGsHbIdutEBiMgp
+#
+# # ローカル環境
+# ---
+# spring:
+#   profiles: dev
+#   data:
+#     basePath: /testbot
+#   datasource:
+#     url: jdbc:mysql://localhost:3306/test_bot?useSSL=false
+#     username: root
+#     password: catty229
+#     driverClassName: com.mysql.jdbc.Driver
+#
+# # テスト環境
+# ---
+# spring:
+#   profiles: test
+#   data:
+#     basePath: /testbot
+#   datasource:
+#     url: jdbc:mysql://[テスト環境のアクセス情報]
+#     username: [ユーザ名]
+#     password: [パスワード]
+#     initialize: com.mysql.jdbc.Driver
+#
+# # 本番環境
+# ---
+# spring:
+#   profiles: production
+#   data:
+#     basePath: /testbot
+#   datasource:
+#     url: jdbc:mysql://[本番環境のアクセス情報]
+#     username: [ユーザ名]
+#     password: [パスワード]
+#     initialize: com.mysql.jdbc.Driver
+#
+# jpa:
+#   database: MYSQL
+#   hibernate:
+#     ddl-auto: update
+#     show-sql: true

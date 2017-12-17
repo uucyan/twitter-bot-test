@@ -63,4 +63,7 @@ noArg {
 
 bootRun {
 	jvmArgs = ['-Dspring.output.ansi.enabled=always']
+	if (project.hasProperty('args')) {
+		args project.args.split('\\s+')
+	}
 }

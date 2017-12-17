@@ -9,8 +9,9 @@ import me.mattak.moment.Moment
 @Component
 class BatchProcessing @Autowired constructor(private val testBot: TestBot) {
 
-  // バッチ起動10秒後に処理を開始し、10間隔で処理を再実行。
-  @Scheduled(initialDelay = 10000, fixedDelay = 10000)
+  // initialDelay：バッチ起動開始後何秒後に実行するか（ミリ秒指定）
+  // fixedDelay：何秒ごとに処理を実行するか（ミリ秒指定）
+  @Scheduled(initialDelay = 10000, fixedDelay = 60000)
   fun fixedRate() {
     println("ツイート処理を開始 ${Moment().format("yyyy/MM/dd HH:mm:ss")}")
     testBot.execute()
