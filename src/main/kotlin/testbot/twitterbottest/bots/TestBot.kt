@@ -5,12 +5,12 @@ import org.springframework.stereotype.Component
 import org.springframework.social.twitter.api.impl.TwitterTemplate
 import org.springframework.social.DuplicateStatusException
 import org.springframework.core.env.Environment
-import testbot.twitterbottest.service.TwitterKeysService
+import testbot.twitterbottest.service.TwitterApplicationService
 import me.mattak.moment.Moment
 import java.util.Random
 
 @Component
-class TestBot @Autowired constructor(private val twitterKeysService: TwitterKeysService,
+class TestBot @Autowired constructor(private val twitterApplicationService: TwitterApplicationService,
                                      private val environment: Environment) {
 
   companion object {
@@ -28,15 +28,15 @@ class TestBot @Autowired constructor(private val twitterKeysService: TwitterKeys
 
   private val rand = Random()
 
-  // DBから取得したデータ
-  private val twitterKeys = twitterKeysService.findByBotType(BOT_TYPE)
+  // Twitterのアカウント情報をから取得したデータ
+  private val twitterApplication = twitterApplicationService.findByBotType(BOT_TYPE)
 
   // 重複回数
   private var duplicateCount = 0
 
   fun execute() {
     println(environment.getProperty("spring.config.name"))
-    val twitter = TwitterTemplate(twitterKeys.consumer_key, twitterKeys.consumer_secret, twitterKeys.access_token, twitterKeys.access_token_secret)
+    val twitter = TwitterTemplate(twitterApplication.consumer_key, twitterApplication.consumer_secret, twitterApplication.access_token, twitterApplication.access_token_secret)
 
     // ツイート処理実行
     // Twitterの重複エラーが発生した場合、指定回数分再帰的に処理を繰り返す。
