@@ -1,6 +1,5 @@
 package testbot.twitterbottest.bots
 
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import org.springframework.social.twitter.api.impl.TwitterTemplate
 import org.springframework.social.DuplicateStatusException
@@ -8,20 +7,22 @@ import org.springframework.core.env.Environment
 import testbot.twitterbottest.service.TwitterApplicationService
 import testbot.twitterbottest.service.TweetLogService
 import testbot.twitterbottest.model.TweetLog
+import testbot.twitterbottest.model.TwitterApplication
+import testbot.twitterbottest.bots.AbstractBot
 import me.mattak.moment.Moment
 import java.util.Random
 
 @Component
-class TestBot @Autowired constructor(private val twitterApplicationService: TwitterApplicationService,
-                                     private val tweetLogService: TweetLogService,
-                                     private val environment: Environment) {
+class FugaBot(twitterApplicationService: TwitterApplicationService,
+              tweetLogService: TweetLogService,
+              environment: Environment): AbstractBot(twitterApplicationService, tweetLogService, environment) {
 
   companion object {
-    const val TWITTER_APLICATION_ID = 1
-    /* const val BOT_TYPE = "test" */
     // 重複処理実行の最大回数
     const val MAX_DUPLICATE_COUNT = 10
   }
+
+  override val botType = "test"
 
   // テスト用のツイート内容
   private val tweets = arrayOf(
@@ -36,19 +37,10 @@ class TestBot @Autowired constructor(private val twitterApplicationService: Twit
   private var duplicateCount = 0
 
   fun execute() {
-    // DBからTwitterのアクセス情報取得
-    // val twitterApplication = twitterApplicationService.findByBotType(BOT_TYPE)
-    val twitterApplication = twitterApplicationService.findById(TWITTER_APLICATION_ID)
-
-    // プロパティの取得確認
-    println(environment.getProperty("spring.config.name"))
-    // twitterApplicationの中身確認
-    println(twitterApplication)
-    // tweet_logテーブルとのリレーション確認
-    println(twitterApplication.getTweetLog())
-
-   // 取得したアクセス情報を元にテンプレートを取得
-    val twitter = TwitterTemplate(twitterApplication.consumer_key, twitterApplication.consumer_secret, twitterApplication.access_token, twitterApplication.access_token_secret)
+    if (twitter !is TwitterTemplate || twitterApplication !is TwitterApplication) {
+      println("Twitterの情報を取得できませんでした。")
+      return
+    }
 
     // ツイート内容生成
     val tweet = "${tweets[rand.nextInt(tweets.size)]} ${Moment().format("yyyy/MM/dd HH:mm:ss")}"
@@ -71,7 +63,7 @@ class TestBot @Autowired constructor(private val twitterApplicationService: Twit
     }
 
     // ツイート内容のログを保存
-    val tweetLog = TweetLog(null, twitterApplication.id, tweet)
+    val tweetLog = TweetLog(null, twitterApplication.id, tweet, false)
     tweetLogService.save(tweetLog)
   }
 }

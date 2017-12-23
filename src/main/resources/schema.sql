@@ -47,6 +47,7 @@ create table if not exists tweet_log (
   id int primary key auto_increment,
   twitter_application_id int(11) NOT NULL,
   tweet varchar(255),
+  is_duplicate_error boolean,
   created_at timestamp not null default current_timestamp,
   updated_at timestamp not null default current_timestamp on update current_timestamp,
   foreign key (twitter_application_id) references twitter_application(id)
