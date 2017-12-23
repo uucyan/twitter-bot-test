@@ -8,7 +8,7 @@ import testbot.twitterbottest.bots.HogeBot
 import me.mattak.moment.Moment
 
 @Component
-class BatchProcessing @Autowired constructor(private val hogeBot: HogeBot,
+class BatchTasks @Autowired constructor(private val hogeBot: HogeBot,
                                              private val fugaBot: FugaBot) {
 
   // initialDelay：バッチ起動開始後何秒後に実行するか（ミリ秒指定）
