@@ -12,7 +12,7 @@ class HogeBot(twitterApplicationService: TwitterApplicationService,
               tweetLogService: TweetLogService,
               environment: Environment): AbstractBot(twitterApplicationService, tweetLogService, environment) {
 
-  override val botType = "test"
+  override val botType = "prod"
 
   fun execute() {
     if (!isExistTwitter()) return

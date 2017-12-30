@@ -22,7 +22,7 @@ class FugaBot(twitterApplicationService: TwitterApplicationService,
     const val MAX_DUPLICATE_COUNT = 10
   }
 
-  override val botType = "test"
+  override val botType = "prod"
 
   // テスト用のツイート内容
   private val tweets = arrayOf(
