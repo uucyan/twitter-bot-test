@@ -10,7 +10,6 @@ import org.springframework.http.HttpMethod;
 import testbot.twitterbottest.bots.FugaBot
 import testbot.twitterbottest.bots.HogeBot
 import me.mattak.moment.Moment
-import java.net.HttpURLConnection
 
 @Component
 class BatchTasks @Autowired constructor(private val hogeBot: HogeBot,
