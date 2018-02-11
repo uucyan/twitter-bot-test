@@ -21,21 +21,21 @@ abstract class AbstractBot @Autowired constructor(private val twitterApplication
   }
 
   abstract val botType: String
-  protected val twitterApplication: TwitterApplication?
-  protected val twitter: TwitterTemplate?
+  protected var twitterApplication: TwitterApplication? = null
+  protected var twitter: TwitterTemplate? = null
 
-  init {
+  protected fun setTwitter(botType: String) {
     // 開発環境の場合はテスト用のボットを使用する
     val env = environment.getProperty("spring.config.name")
 
     // ボットのTwitter情報を取得
-    twitterApplication = twitterApplicationService.findByBotType(if (env == DEV_ENV) "test" else botType)
+    twitterApplication = twitterApplicationService.findByBotType(if (env == DEV_ENV) DEV_ENV else botType)
 
     // 取得したアクセス情報を元にテンプレートを取得
-    twitter = TwitterTemplate(twitterApplication.consumer_key,
-                              twitterApplication.consumer_secret,
-                              twitterApplication.access_token,
-                              twitterApplication.access_token_secret)
+    twitter = TwitterTemplate(twitterApplication?.consumer_key,
+                              twitterApplication?.consumer_secret,
+                              twitterApplication?.access_token,
+                              twitterApplication?.access_token_secret)
   }
 
   /**
@@ -44,13 +44,15 @@ abstract class AbstractBot @Autowired constructor(private val twitterApplication
    * @param tweet String
    */
   protected fun sendTweet(tweet: String) {
+    var isDuplicateError = false
     try {
-      twitter!!.timelineOperations().updateStatus(tweet)
-      saveTweetLog(tweet, false)
+      twitter?.run {
+        timelineOperations().updateStatus(tweet)
+      }
     } catch (e: DuplicateStatusException) {
-      saveTweetLog(tweet, true)
+      isDuplicateError = true
     } finally {
-      // 今のところここで処理する内容ないけどfinally定義しておく
+      saveTweetLog(tweet, isDuplicateError)
     }
   }
 
@@ -61,11 +63,13 @@ abstract class AbstractBot @Autowired constructor(private val twitterApplication
    * @param isDuplicateError Boolean
    */
   protected fun saveTweetLog(tweet: String, isDuplicateError: Boolean) {
-    tweetLogService.save(TweetLog(null, twitterApplication!!.id, tweet, isDuplicateError))
+    tweetLogService.save(TweetLog(null, twitterApplication?.id, tweet, isDuplicateError))
   }
 
   /**
    * Twitter情報の存在チェック
+   *
+   * @return Boolean
    */
   protected fun isExistTwitter(): Boolean = twitter is TwitterTemplate && twitterApplication is TwitterApplication
 }
