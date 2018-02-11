@@ -12,7 +12,7 @@ import testbot.twitterbottest.model.TwitterApplication
 @Entity
 @Table(name = "tweet_log")
 data class TweetLog(@Id @GeneratedValue var id: Int?,
-                    @Column(nullable = false) var twitter_application_id: Int,
+                    @Column(nullable = false) var twitter_application_id: Int?,
                     @Column(nullable = false) var tweet: String,
                     @Column(nullable = false) var is_duplicate_error: Boolean) {
 

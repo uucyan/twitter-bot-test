@@ -36,7 +36,7 @@ class FugaBot(twitterApplicationService: TwitterApplicationService,
   // 重複回数
   private var duplicateCount = 0
 
-  fun execute() {
+  /* fun execute() {
     if (twitter !is TwitterTemplate || twitterApplication !is TwitterApplication) {
       println("Twitterの情報を取得できませんでした。")
       return
@@ -65,5 +65,5 @@ class FugaBot(twitterApplicationService: TwitterApplicationService,
     // ツイート内容のログを保存
     val tweetLog = TweetLog(null, twitterApplication.id, tweet, false)
     tweetLogService.save(tweetLog)
-  }
+  } */
 }
