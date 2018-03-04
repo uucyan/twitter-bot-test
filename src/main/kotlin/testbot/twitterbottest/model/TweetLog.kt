@@ -14,7 +14,7 @@ import testbot.twitterbottest.model.TwitterApplication
 data class TweetLog(@Id @GeneratedValue var id: Int?,
                     @Column(nullable = false) var twitter_application_id: Int?,
                     @Column(nullable = false) var tweet: String,
-                    @Column(nullable = false) var is_duplicate_error: Boolean) {
+                    @Column(nullable = false) var error_message: String) {
 
   @ManyToOne
   @JoinColumn(nullable = false, insertable = false, updatable = false, name = "twitter_application_id")
