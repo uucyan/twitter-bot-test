@@ -24,12 +24,9 @@ abstract class AbstractBot @Autowired constructor(private val twitterApplication
   protected var twitterApplication: TwitterApplication? = null
   protected var twitter: TwitterTemplate? = null
 
-  protected fun setTwitter(botType: String) {
-    // 開発環境の場合はテスト用のボットを使用する
-    val env = environment.getProperty("spring.config.name")
-
+  protected fun setTwitter() {
     // ボットのTwitter情報を取得
-    twitterApplication = twitterApplicationService.findByBotType(if (env == DEV_ENV) DEV_ENV else botType)
+    twitterApplication = twitterApplicationService.findByBotType(getEnvBotType())
 
     // 取得したアクセス情報を元にテンプレートを取得
     twitter = TwitterTemplate(twitterApplication?.consumer_key,
@@ -72,4 +69,11 @@ abstract class AbstractBot @Autowired constructor(private val twitterApplication
    * @return Boolean
    */
   protected fun isExistTwitter(): Boolean = twitter is TwitterTemplate && twitterApplication is TwitterApplication
+
+  /**
+   * 環境を判定してbotTypeを返却
+   *
+   * @return String
+   */
+  protected fun getEnvBotType(): String = if (environment.getProperty("spring.config.name") == DEV_ENV) DEV_ENV else botType
 }

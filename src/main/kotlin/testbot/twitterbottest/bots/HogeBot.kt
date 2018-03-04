@@ -16,7 +16,7 @@ class HogeBot(twitterApplicationService: TwitterApplicationService,
   override val botType = "prod"
 
   fun execute() {
-    setTwitter(botType)
+    setTwitter()
     if (!isExistTwitter()) return
     sendTweet("Hogeのツイート ${Moment().format("yyyy/MM/dd HH:mm:ss")}")
   }
