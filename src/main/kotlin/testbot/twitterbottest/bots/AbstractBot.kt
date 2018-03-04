@@ -1,7 +1,6 @@
 package testbot.twitterbottest.bots
 
 import org.springframework.beans.factory.annotation.Autowired
-/* import org.springframework.stereotype.Component */
 import org.springframework.social.twitter.api.impl.TwitterTemplate
 import org.springframework.social.DuplicateStatusException
 import org.springframework.web.client.ResourceAccessException
@@ -25,6 +24,9 @@ abstract class AbstractBot @Autowired constructor(private val twitterApplication
   protected var twitterApplication: TwitterApplication? = null
   protected var twitter: TwitterTemplate? = null
 
+  /**
+   * botTypeを元にTwitterを取得
+   */
   protected fun setTwitter() {
     // ボットのTwitter情報を取得
     twitterApplication = twitterApplicationService.findByBotType(getEnvBotType())
@@ -38,8 +40,6 @@ abstract class AbstractBot @Autowired constructor(private val twitterApplication
 
   /**
    * ツイート送信
-   *
-   * @param tweet String
    */
   protected fun sendTweet(tweet: String) {
     var errorMessage = ""
@@ -60,9 +60,6 @@ abstract class AbstractBot @Autowired constructor(private val twitterApplication
 
   /**
    * ツイートのログを保存
-   *
-   * @param tweet String
-   * @param errorMessage String
    */
   protected fun saveTweetLog(tweet: String, errorMessage: String) {
     tweetLogService.save(TweetLog(null, twitterApplication?.id, tweet, errorMessage))
@@ -70,15 +67,12 @@ abstract class AbstractBot @Autowired constructor(private val twitterApplication
 
   /**
    * Twitter情報の存在チェック
-   *
-   * @return Boolean
    */
   protected fun isExistTwitter(): Boolean = twitter is TwitterTemplate && twitterApplication is TwitterApplication
 
   /**
    * 環境を判定してbotTypeを返却
-   *
-   * @return String
+   * 開発環境の場合は DEV_ENV を必ず返却する。
    */
   protected fun getEnvBotType(): String = if (environment.getProperty("spring.config.name") == DEV_ENV) DEV_ENV else botType
 }

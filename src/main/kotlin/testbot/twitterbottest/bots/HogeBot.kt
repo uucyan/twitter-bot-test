@@ -1,7 +1,6 @@
 package testbot.twitterbottest.bots
 
 import org.springframework.stereotype.Component
-import org.springframework.social.DuplicateStatusException
 import org.springframework.core.env.Environment
 import testbot.twitterbottest.service.TwitterApplicationService
 import testbot.twitterbottest.service.TweetLogService
