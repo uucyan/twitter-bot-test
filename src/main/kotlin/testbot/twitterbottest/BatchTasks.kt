@@ -23,7 +23,7 @@ class BatchTasks @Autowired constructor(private val hogeBot: HogeBot,
 
   // initialDelay：バッチ起動開始後何秒後に実行するか（ミリ秒指定）
   // fixedDelay：何秒ごとに処理を実行するか（ミリ秒指定）
-  @Scheduled(initialDelay = 7000, fixedDelay = 300000)
+  @Scheduled(initialDelay = 5000, fixedDelay = 1800000)
   fun hogeBot() {
     println("${hogeBot::class.java.name} ツイート処理を開始 ${Moment().format("yyyy/MM/dd HH:mm:ss")}")
     hogeBot.execute()
