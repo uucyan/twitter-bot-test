@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired
 /* import org.springframework.stereotype.Component */
 import org.springframework.social.twitter.api.impl.TwitterTemplate
 import org.springframework.social.DuplicateStatusException
+import org.springframework.web.client.ResourceAccessException
 import org.springframework.core.env.Environment
 import testbot.twitterbottest.service.TwitterApplicationService
 import testbot.twitterbottest.service.TweetLogService
@@ -41,15 +42,19 @@ abstract class AbstractBot @Autowired constructor(private val twitterApplication
    * @param tweet String
    */
   protected fun sendTweet(tweet: String) {
-    var isDuplicateError = false
+    var errorMessage = ""
     try {
       twitter?.run {
         timelineOperations().updateStatus(tweet)
       }
     } catch (e: DuplicateStatusException) {
-      isDuplicateError = true
+      // ツイートの重複エラー
+      errorMessage = "${e}"
+    } catch (e: ResourceAccessException) {
+      // 何らかの理由でTwitter API側でPOSTを拒否された
+      errorMessage = "${e}"
     } finally {
-      saveTweetLog(tweet, isDuplicateError)
+      saveTweetLog(tweet, errorMessage)
     }
   }
 
@@ -57,10 +62,10 @@ abstract class AbstractBot @Autowired constructor(private val twitterApplication
    * ツイートのログを保存
    *
    * @param tweet String
-   * @param isDuplicateError Boolean
+   * @param errorMessage String
    */
-  protected fun saveTweetLog(tweet: String, isDuplicateError: Boolean) {
-    tweetLogService.save(TweetLog(null, twitterApplication?.id, tweet, isDuplicateError))
+  protected fun saveTweetLog(tweet: String, errorMessage: String) {
+    tweetLogService.save(TweetLog(null, twitterApplication?.id, tweet, errorMessage))
   }
 
   /**
