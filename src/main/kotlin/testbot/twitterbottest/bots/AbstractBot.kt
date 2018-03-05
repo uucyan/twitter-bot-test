@@ -3,6 +3,7 @@ package testbot.twitterbottest.bots
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.social.twitter.api.impl.TwitterTemplate
 import org.springframework.social.DuplicateStatusException
+import org.springframework.social.OperationNotPermittedException
 import org.springframework.web.client.ResourceAccessException
 import org.springframework.core.env.Environment
 import testbot.twitterbottest.service.TwitterApplicationService
@@ -48,11 +49,13 @@ abstract class AbstractBot @Autowired constructor(private val twitterApplication
         timelineOperations().updateStatus(tweet)
       }
     } catch (e: DuplicateStatusException) {
-      // ツイートの重複エラー
-      errorMessage = "${e}"
+      errorMessage = "ツイートの重複エラー。\n${e}"
     } catch (e: ResourceAccessException) {
-      // 何らかの理由でTwitter API側でPOSTを拒否された
-      errorMessage = "${e}"
+      errorMessage = "TwitterAPI側でPOSTが拒否された。\n${e}"
+    } catch (e: OperationNotPermittedException) {
+      errorMessage = "アカウントの凍結により権限エラー。\n${e}"
+    } catch (e: Exception) {
+      errorMessage = "想定外のエラー。\n${e}"
     } finally {
       saveTweetLog(tweet, errorMessage)
     }
